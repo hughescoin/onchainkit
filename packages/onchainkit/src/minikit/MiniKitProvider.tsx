@@ -30,6 +30,8 @@ export function MiniKitProvider({
   children,
   notificationProxyUrl = '/api/notify',
   autoConnect = true,
+  projectName,
+  appLogoUrl,
   ...onchainKitProps
 }: MiniKitProviderReact & OnchainKitProviderReact) {
   const [context, setContext] = useState<Context.MiniAppContext | null>(null);
@@ -109,12 +111,12 @@ export function MiniKitProvider({
       context // if context is set, the app is running in a frame, use farcasterFrame connector
         ? farcasterFrame()
         : coinbaseWallet({
-            appName: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-            appLogoUrl: process.env.NEXT_PUBLIC_ICON_URL,
+            appName: projectName || 'OnchainKit App',
+            appLogoUrl: appLogoUrl,
             preference: onchainKitProps.config?.wallet?.preference,
           }),
     ];
-  }, [context, onchainKitProps.config?.wallet?.preference]);
+  }, [context, onchainKitProps.config?.wallet?.preference, projectName, appLogoUrl]);
 
   const value = useMemo(() => {
     return {

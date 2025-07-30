@@ -7,8 +7,6 @@ import { http } from "viem";
 import { createPublicClient } from "viem";
 import { optimism } from "viem/chains";
 
-const appName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME;
-
 const KEY_REGISTRY_ADDRESS = "0x00000000Fc1237824fb747aBDE0FF18990E59b7e";
 
 const KEY_REGISTRY_ABI = [
@@ -77,6 +75,10 @@ export async function POST(request: Request) {
     );
   }
 
+  const appName = "MiniKit Snake";
+  const appUrl = "";
+  const notificationServiceKey = "minikit";
+
   switch (event.event) {
     case "frame_added":
       console.log(
@@ -85,36 +87,38 @@ export async function POST(request: Request) {
         event.notificationDetails,
       );
       if (event.notificationDetails) {
-        await setUserNotificationDetails(fid, event.notificationDetails);
+        await setUserNotificationDetails(fid, event.notificationDetails, notificationServiceKey);
         await sendFrameNotification({
           fid,
           title: `Welcome to ${appName}`,
           body: `Thank you for adding ${appName}`,
+          appUrl,
         });
       } else {
-        await deleteUserNotificationDetails(fid);
+        await deleteUserNotificationDetails(fid, notificationServiceKey);
       }
 
       break;
     case "frame_removed": {
       console.log("frame_removed");
-      await deleteUserNotificationDetails(fid);
+      await deleteUserNotificationDetails(fid, notificationServiceKey);
       break;
     }
     case "notifications_enabled": {
       console.log("notifications_enabled", event.notificationDetails);
-      await setUserNotificationDetails(fid, event.notificationDetails);
+      await setUserNotificationDetails(fid, event.notificationDetails, notificationServiceKey);
       await sendFrameNotification({
         fid,
         title: `Welcome to ${appName}`,
         body: `Thank you for enabling notifications for ${appName}`,
+        appUrl,
       });
 
       break;
     }
     case "notifications_disabled": {
       console.log("notifications_disabled");
-      await deleteUserNotificationDetails(fid);
+      await deleteUserNotificationDetails(fid, notificationServiceKey);
 
       break;
     }

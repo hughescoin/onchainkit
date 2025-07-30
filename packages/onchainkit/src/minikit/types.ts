@@ -25,6 +25,15 @@ export type MiniKitProviderReact = {
    * @defaultValue `true`
    */
   autoConnect?: boolean;
+  /**
+   * The project name to use for the Coinbase Wallet connector when not in a Mini App.
+   * Falls back to 'OnchainKit App' if not provided.
+   */
+  projectName?: string;
+  /**
+   * The app logo URL to use for the Coinbase Wallet connector when not in a Mini App.
+   */
+  appLogoUrl?: string;
 };
 
 export type MiniKitContextType = {
